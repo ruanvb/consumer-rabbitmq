@@ -1,36 +1,52 @@
+#consumer de mensagens do RabbitMQ
+
+#imports
+from config import rabbitmq_server, sistema_legado
+
 import os
 import sys
 import time
-
 import pika
 import requests
 import json
 
 
 def main():
-    parameters = pika.URLParameters('amqps://qsvvrqtm:XCvydaLcdvhxgwOUKjXAfviC3G30nK8f@woodpecker.rmq.cloudamqp.com/qsvvrqtm')
+    #parâmetros da url para conexão
+    parameters = pika.URLParameters(rabbitmq_server["url_connection"])
     connection = pika.BlockingConnection(parameters)
+    
+    #canal de conexão
     channel = connection.channel()
-    channel.queue_declare(queue='marcacao-ponto', durable=True)
+    channel.queue_declare(queue=rabbitmq_server["queue"], durable=True)
 
+    #responsável por consumir as mensagens
     def callback(ch, method, properties, body):
         print( " [*] Recebido %r" % body.decode())
         time.sleep(body.count( b'.' ))
-
-        url = "https://api.mockytonk.com/proxy/ab2198a3-cafd-49d5-8ace-baac64e72222"
         data = body.decode()
+
+        #Request API Legado
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-        r = requests.post(url, data=json.dumps(data), headers=headers)
+        r = requests.post(sistema_legado["url_api"], data=json.dumps(data), headers=headers)
+        
+        #simula tempo de resposta da API - segundo orientações do Desafio
         time.sleep(9)
         print(r.json())
-        print(r.status_code)
+
+        #trata mensagem de retorno
         if(r.status_code == 200):
+            #caso sucesso, confirma recebimento
             ch.basic_ack(delivery_tag = method.delivery_tag)
         else:
+            #caso erro, permanece mensagem na fila até que seja tratada novamente
             ch.basic_nack(delivery_tag = method.delivery_tag)
 
-    channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue='marcacao-ponto',
+    #define o tratamento de 100 mensagens lidas por consumer
+    channel.basic_qos(prefetch_count=100)
+
+    #consome mensagens
+    channel.basic_consume(queue=rabbitmq_server["queue"],
                         on_message_callback=callback)
 
     print(' [*] Aguardando mensagens')
