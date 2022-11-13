@@ -45,13 +45,13 @@ def main():
             #caso erro, permanece mensagem na fila até que seja tratada novamente
             ch.basic_nack(delivery_tag = method.delivery_tag)
 
-    #- Define o tratamento de 100 mensagens por vez, lidas pelos consumers
+    #- Define o tratamento de 1 mensagem por vez, lidas pelos consumers
     #-- A definição correta dependerá de quantos consumers estarão ativos
     #--- Por exemplo, se fosse utilizado apenas um consumer, o número poderia ser maior, mas não seria o ideal.
     #--- Caso fossem utilizados 1000 consumers, o ideal é que fosse realizada uma análise da volumetria, para 
     #--- que desa forma fosse realizado um cálculo balanceado, sem que sobrecarregue um consumer e sem que um
     #--- consumer fique ocioso.
-    channel.basic_qos(prefetch_count=100)
+    channel.basic_qos(prefetch_count=1)
 
     #consome mensagens
     channel.basic_consume(queue=rabbitmq_server["queue"],
