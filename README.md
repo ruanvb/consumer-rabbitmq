@@ -16,8 +16,14 @@ Para que seja possível, é necessarío:
 - Adicionar o Python ao Path;
 - Abrir o Prompt de Comando.
 
-Após abrir o Prompt, deverá ser acessado o diretório onde foi baixado o repositório, e deverá ser executado o comando "python receive.py".
+Após abrir o Prompt, deverá ser acessado o diretório onde foi baixado o repositório. 
+
+Deverá ser executado o comando "pip install -r requirements.txt".
+
+Deverá ser executado o comando "python receive.py".
 
 Será exibida uma mensagem "[*] Aguardando mensagens" e, quando publicadas as mensagens, o consumer irá automaticamente baixar da fila.
+
+Será exibido um log no Prompt: "[*] Recebido" + conteúdo publicado.
 
 Para gerar uma mensagem, poderá ser acessada a aplicação web desenvolvida: https://api-marcacao-ponto.herokuapp.com/ e realizado um registro de ponto.
