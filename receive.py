@@ -22,6 +22,7 @@ def main():
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         r = requests.post(url, data=json.dumps(data), headers=headers)
         print(r.json())
+        print(r.status_code)
 
         ch.basic_ack(delivery_tag = method.delivery_tag)
         #ch.basic_nack(delivery_tag = method.delivery_tag)
