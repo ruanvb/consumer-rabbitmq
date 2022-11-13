@@ -6,6 +6,8 @@ Backend responsável por consumir as mensagens publicadas no RabbitMQ.
 ## Sobre a Solução 
 Atualmente os consumers estão hospedados em um servidor gratuito, entretanto, detalhes de como executar em ambiente local poderão ser consultados no tópico "Testes".
 
+O arquivo config.py carrega as configurações para a execução.
+
 ## Testes
 O testes dos consumers podem ser realizados de forma local, apesar de atualmente um consumer estar ativo em um ambiente dedicado. 
 
