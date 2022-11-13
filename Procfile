@@ -1,1 +1,1 @@
-web: python receive.py
+worker: python receive.py
