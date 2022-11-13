@@ -24,7 +24,7 @@ def main():
         print(r.json())
 
         ch.basic_ack(delivery_tag = method.delivery_tag)
-        ch.basic_nack(delivery_tag = method.delivery_tag)
+        #ch.basic_nack(delivery_tag = method.delivery_tag)
 
     channel.basic_qos(prefetch_count=1)
     channel.basic_consume(queue='marcacao-ponto',
