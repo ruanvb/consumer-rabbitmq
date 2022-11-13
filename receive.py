@@ -21,11 +21,13 @@ def main():
         data = body.decode()
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         r = requests.post(url, data=json.dumps(data), headers=headers)
+        time.sleep(9)
         print(r.json())
         print(r.status_code)
-
-        ch.basic_ack(delivery_tag = method.delivery_tag)
-        #ch.basic_nack(delivery_tag = method.delivery_tag)
+        if(r.status_code == 200):
+            ch.basic_ack(delivery_tag = method.delivery_tag)
+        else:
+            ch.basic_nack(delivery_tag = method.delivery_tag)
 
     channel.basic_qos(prefetch_count=1)
     channel.basic_consume(queue='marcacao-ponto',
