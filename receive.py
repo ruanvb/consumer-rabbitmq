@@ -31,7 +31,10 @@ def main():
         r = requests.post(sistema_legado["url_api"], data=json.dumps(data), headers=headers)
         
         #simula tempo de resposta da API - segundo orientações do Desafio
-        time.sleep(9)
+        #foram utilizados 9 segundos para simular, pois naturalmente a execução já demora em torno de 1 segundo
+        #entretanto, o código abaixo ficará comentado, pois como a estrutura de consumers disponibilizada
+        #não atende a necessidade atual, para os testes é ideal que não seja considerado o tempo de resposta da API
+        #time.sleep(9)
         print(r.json())
 
         #trata mensagem de retorno
@@ -42,7 +45,12 @@ def main():
             #caso erro, permanece mensagem na fila até que seja tratada novamente
             ch.basic_nack(delivery_tag = method.delivery_tag)
 
-    #define o tratamento de 100 mensagens lidas por consumer
+    #- Define o tratamento de 100 mensagens por vez, lidas pelos consumers
+    #-- A definição correta dependerá de quantos consumers estarão ativos
+    #--- Por exemplo, se fosse utilizado apenas um consumer, o número poderia ser maior, mas não seria o ideal.
+    #--- Caso fossem utilizados 1000 consumers, o ideal é que fosse realizada uma análise da volumetria, para 
+    #--- que desa forma fosse realizado um cálculo balanceado, sem que sobrecarregue um consumer e sem que um
+    #--- consumer fique ocioso.
     channel.basic_qos(prefetch_count=100)
 
     #consome mensagens

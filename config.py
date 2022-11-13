@@ -1,4 +1,4 @@
-APPNAME = "api-cadastra-marcacao"
+APPNAME = "api-consumer-rabbitmq"
 
 rabbitmq_server = {
     "url_connection": "amqps://qsvvrqtm:XCvydaLcdvhxgwOUKjXAfviC3G30nK8f@woodpecker.rmq.cloudamqp.com/qsvvrqtm",
